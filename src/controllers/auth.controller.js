@@ -1,5 +1,5 @@
-const authService = require('../services/auth.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import authService from '../services/auth.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const login = async (req, res) => {
   try {
@@ -52,7 +52,7 @@ const getUserInfo = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   login,
   register,
   getUserInfo

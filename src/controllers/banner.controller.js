@@ -1,5 +1,5 @@
-const bannerService = require('../services/banner.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import bannerService from '../services/banner.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const getBanners = async (req, res) => {
   try {
@@ -16,6 +16,6 @@ const getBanners = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getBanners
 };

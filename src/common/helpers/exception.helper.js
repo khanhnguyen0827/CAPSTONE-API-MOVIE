@@ -16,3 +16,12 @@ export class UnauthorizedException extends Error {
       this.code = statusCodes.UNAUTHORIZED;//401 logout
    }
 }
+
+export {
+  AppError,
+  ValidationError,
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  ConflictError
+};

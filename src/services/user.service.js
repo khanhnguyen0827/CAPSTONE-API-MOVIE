@@ -1,7 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
-
-const prisma = new PrismaClient();
+import bcrypt from 'bcryptjs';
+import prisma from '../common/prisma/init.prisma.js';
 
 class UserService {
   async getAllUsers() {
@@ -466,4 +464,4 @@ class UserService {
   }
 }
 
-module.exports = new UserService();
+export default new UserService();

@@ -1,17 +1,17 @@
-const express = require('express');
-const { 
-  getUsers, 
-  getUsersPaginated, 
-  searchUsers, 
-  searchUsersPaginated, 
-  getUserTypes, 
-  getUserById, 
-  createUser, 
-  updateUser, 
-  deleteUser 
-} = require('../controllers/user.controller');
-const { validateUser, validateUserUpdate } = require('../common/validators/user.validator');
-const { protect, adminOnly } = require('../common/middlewares/protect.middleware');
+import express from 'express';
+import {
+  getUsers,
+  getUsersPaginated,
+  searchUsers,
+  searchUsersPaginated,
+  getUserTypes,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser
+} from '../controllers/user.controller.js';
+import { validateUser, validateUserUpdate } from '../common/validators/user.validator.js';
+import { protect, adminOnly } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
@@ -554,4 +554,4 @@ router.put('/cap-nhat-nguoi-dung/:taiKhoan', protect, adminOnly, validateUserUpd
  */
 router.delete('/xoa-nguoi-dung/:taiKhoan', protect, adminOnly, deleteUser);
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const userService = require('../services/user.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import userService from '../services/user.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const getUsers = async (req, res) => {
   try {
@@ -158,7 +158,7 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getUsers,
   getUsersPaginated,
   searchUsers,

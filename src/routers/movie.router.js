@@ -1,23 +1,23 @@
-const express = require('express');
-const multer = require('multer');
-const { 
-  getMovies, 
-  getMoviesPaginated, 
-  getMoviesByDate, 
-  getMovieById, 
-  createMovie, 
-  updateMovie, 
+import express from 'express';
+import multer from 'multer';
+import {
+  getMovies,
+  getMoviesPaginated,
+  getMoviesByDate,
+  getMovieById,
+  createMovie,
+  updateMovie,
   deleteMovie,
-  uploadImage 
-} = require('../controllers/movie.controller');
-const { validateMovie, validateMovieUpdate } = require('../common/validators/movie.validator');
-const { protect, adminOnly } = require('../common/middlewares/protect.middleware');
+  uploadImage
+} from '../controllers/movie.controller.js';
+import { validateMovie, validateMovieUpdate } from '../common/validators/movie.validator.js';
+import { protect, adminOnly } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
 // Configure multer for file uploads
 const storage = multer.memoryStorage();
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: {
     fileSize: 5 * 1024 * 1024 // 5MB limit
@@ -529,4 +529,4 @@ router.delete('/xoa-phim/:maPhim', protect, adminOnly, deleteMovie);
  */
 router.post('/upload-hinh-anh', protect, adminOnly, upload.single('hinhAnh'), uploadImage);
 
-module.exports = router;
+export default router;

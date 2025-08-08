@@ -1,5 +1,16 @@
-const express = require('express');
+import express from 'express';
 const router = express.Router();
+
+// Import constants
+import { SERVER_CONFIG, API_MESSAGES } from '../common/constant/app.constant.js';
+
+// Import child routers
+import authRoutes from './auth.router.js';
+import movieRoutes from './movie.router.js';
+import cinemaRoutes from './cinema.router.js';
+import bookingRoutes from './booking.router.js';
+import userRoutes from './user.router.js';
+import bannerRoutes from './banner.router.js';
 
 /**
  * @swagger
@@ -14,47 +25,10 @@ const router = express.Router();
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "Welcome to Movie Ticketing System API"
- *                 version:
- *                   type: string
- *                   example: "1.0.0"
- *                 documentation:
- *                   type: string
- *                   example: "/api/v1/docs"
- *                 endpoints:
- *                   type: object
- *                   properties:
- *                     auth:
- *                       type: string
- *                       example: "/api/v1/auth"
- *                     movies:
- *                       type: string
- *                       example: "/api/v1/movies"
- *                     cinemas:
- *                       type: string
- *                       example: "/api/v1/cinemas"
- *                     bookings:
- *                       type: string
- *                       example: "/api/v1/bookings"
- *                     users:
- *                       type: string
- *                       example: "/api/v1/users"
- *                     banners:
- *                       type: string
- *                       example: "/api/v1/banners"
- *                 timestamp:
- *                   type: string
- *                   format: date-time
- *                 status:
- *                   type: string
- *                   example: "running"
+ *               $ref: '#/components/schemas/RootResponse'
  */
 router.get('/', (req, res) => {
-  const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+  const API_PREFIX = SERVER_CONFIG.API_PREFIX;
   
   res.json({
     message: 'Welcome to Movie Ticketing System API',
@@ -86,37 +60,18 @@ router.get('/', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: "OK"
- *                 message:
- *                   type: string
- *                   example: "Movie Ticketing API is running"
- *                 timestamp:
- *                   type: string
- *                   format: date-time
- *                 version:
- *                   type: string
- *                   example: "1.0.0"
- *                 uptime:
- *                   type: number
- *                   example: 123.456
- *                 environment:
- *                   type: string
- *                   example: "development"
+ *               $ref: '#/components/schemas/HealthResponse'
  */
 router.get('/health', (req, res) => {
   const uptime = process.uptime();
-  const environment = process.env.NODE_ENV || 'development';
+  const environment = SERVER_CONFIG.NODE_ENV;
   
   res.status(200).json({
     status: 'OK',
     message: 'Movie Ticketing API is running',
     timestamp: new Date().toISOString(),
     version: '1.0.0',
-    uptime: Math.round(uptime * 1000) / 1000, // Round to 3 decimal places
+    uptime: Math.round(uptime * 1000) / 1000,
     environment: environment
   });
 });
@@ -134,54 +89,12 @@ router.get('/health', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 status:
- *                   type: string
- *                   example: "healthy"
- *                 version:
- *                   type: string
- *                   example: "1.0.0"
- *                 environment:
- *                   type: string
- *                   example: "development"
- *                 timestamp:
- *                   type: string
- *                   format: date-time
- *                 memory:
- *                   type: object
- *                   properties:
- *                     used:
- *                       type: number
- *                       example: 45.2
- *                     total:
- *                       type: number
- *                       example: 1024
- *                     free:
- *                       type: number
- *                       example: 978.8
- *                 uptime:
- *                   type: number
- *                   example: 123.456
- *                 endpoints:
- *                   type: array
- *                   items:
- *                     type: object
- *                     properties:
- *                       name:
- *                         type: string
- *                         example: "Authentication"
- *                       path:
- *                         type: string
- *                         example: "/api/v1/auth"
- *                       status:
- *                         type: string
- *                         example: "active"
+ *               $ref: '#/components/schemas/StatusResponse'
  */
 router.get('/status', (req, res) => {
   const uptime = process.uptime();
-  const environment = process.env.NODE_ENV || 'development';
-  const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+  const environment = SERVER_CONFIG.NODE_ENV;
+  const API_PREFIX = SERVER_CONFIG.API_PREFIX;
   
   // Get memory usage
   const memUsage = process.memoryUsage();
@@ -224,41 +137,10 @@ router.get('/status', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 name:
- *                   type: string
- *                   example: "Movie Ticketing API"
- *                 version:
- *                   type: string
- *                   example: "1.0.0"
- *                 description:
- *                   type: string
- *                   example: "A comprehensive API for movie ticketing system"
- *                 author:
- *                   type: string
- *                   example: "Development Team"
- *                 contact:
- *                   type: object
- *                   properties:
- *                     email:
- *                       type: string
- *                       example: "support@movieticketing.com"
- *                     website:
- *                       type: string
- *                       example: "https://movieticketing.com"
- *                 documentation:
- *                   type: string
- *                   example: "/api/v1/docs"
- *                 repository:
- *                   type: string
- *                   example: "https://github.com/your-repo"
- *                 license:
- *                   type: string
- *                   example: "MIT"
+ *               $ref: '#/components/schemas/InfoResponse'
  */
 router.get('/info', (req, res) => {
-  const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+  const API_PREFIX = SERVER_CONFIG.API_PREFIX;
   
   res.json({
     name: 'Movie Ticketing API',
@@ -305,14 +187,7 @@ router.get('/info', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 message:
- *                   type: string
- *                   example: "pong"
- *                 timestamp:
- *                   type: string
- *                   format: date-time
+ *               $ref: '#/components/schemas/PingResponse'
  */
 router.get('/ping', (req, res) => {
   res.json({
@@ -333,7 +208,7 @@ router.get('/ping', (req, res) => {
  *         description: Redirect to documentation
  */
 router.get('/docs', (req, res) => {
-  const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+  const API_PREFIX = SERVER_CONFIG.API_PREFIX;
   res.redirect(`${API_PREFIX}/docs`);
 });
 
@@ -350,39 +225,10 @@ router.get('/docs', (req, res) => {
  *         content:
  *           application/json:
  *             schema:
- *               type: object
- *               properties:
- *                 baseUrl:
- *                   type: string
- *                   example: "/api/v1"
- *                 endpoints:
- *                   type: object
- *                   properties:
- *                     auth:
- *                       type: object
- *                       properties:
- *                         path:
- *                           type: string
- *                           example: "/api/v1/auth"
- *                         methods:
- *                           type: array
- *                           items:
- *                             type: string
- *                           example: ["POST", "GET"]
- *                     movies:
- *                       type: object
- *                       properties:
- *                         path:
- *                           type: string
- *                           example: "/api/v1/movies"
- *                         methods:
- *                           type: array
- *                           items:
- *                             type: string
- *                           example: ["GET", "POST", "PUT", "DELETE"]
+ *               $ref: '#/components/schemas/ApiInfoResponse'
  */
 router.get('/api', (req, res) => {
-  const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+  const API_PREFIX = SERVER_CONFIG.API_PREFIX;
   
   res.json({
     baseUrl: API_PREFIX,
@@ -423,6 +269,69 @@ router.get('/api', (req, res) => {
   });
 });
 
+// Mount child routers with API prefix
+const API_PREFIX = SERVER_CONFIG.API_PREFIX;
+
+/**
+ * @swagger
+ * /api/v1/auth:
+ *   get:
+ *     summary: Authentication Module
+ *     description: All authentication related endpoints
+ *     tags: [Authentication]
+ */
+router.use(`${API_PREFIX}/auth`, authRoutes);
+
+/**
+ * @swagger
+ * /api/v1/movies:
+ *   get:
+ *     summary: Movies Module
+ *     description: All movie management endpoints
+ *     tags: [Movies]
+ */
+router.use(`${API_PREFIX}/movies`, movieRoutes);
+
+/**
+ * @swagger
+ * /api/v1/cinemas:
+ *   get:
+ *     summary: Cinemas Module
+ *     description: All cinema information endpoints
+ *     tags: [Cinemas]
+ */
+router.use(`${API_PREFIX}/cinemas`, cinemaRoutes);
+
+/**
+ * @swagger
+ * /api/QuanLyDatVe:
+ *   get:
+ *     summary: Quản lý đặt vé Module
+ *     description: All ticket management and booking endpoints
+ *     tags: [QuanLyDatVe]
+ */
+router.use('/api/QuanLyDatVe', bookingRoutes);
+
+/**
+ * @swagger
+ * /api/v1/users:
+ *   get:
+ *     summary: Users Module
+ *     description: All user management endpoints
+ *     tags: [Users]
+ */
+router.use(`${API_PREFIX}/users`, userRoutes);
+
+/**
+ * @swagger
+ * /api/v1/banners:
+ *   get:
+ *     summary: Banners Module
+ *     description: All banner management endpoints
+ *     tags: [Banners]
+ */
+router.use(`${API_PREFIX}/banners`, bannerRoutes);
+
 // 404 handler for root router
 router.use('*', (req, res) => {
   res.status(404).json({
@@ -435,9 +344,15 @@ router.use('*', (req, res) => {
       'GET /info',
       'GET /ping',
       'GET /docs',
-      'GET /api'
+      'GET /api',
+      `${API_PREFIX}/auth/*`,
+      `${API_PREFIX}/movies/*`,
+      `${API_PREFIX}/cinemas/*`,
+      `${API_PREFIX}/bookings/*`,
+      `${API_PREFIX}/users/*`,
+      `${API_PREFIX}/banners/*`
     ]
   });
 });
 
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-const movieService = require('../services/movie.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import movieService from '../services/movie.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const getMovies = async (req, res) => {
   try {
@@ -160,14 +160,13 @@ const deleteMovie = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getMovies,
   getMoviesPaginated,
   getMoviesByDate,
   getMovieById,
-  getBanners,
   createMovie,
   updateMovie,
-  uploadImage,
-  deleteMovie
+  deleteMovie,
+  uploadImage
 };

@@ -1,6 +1,6 @@
-const Joi = require('joi');
-const { errorResponse } = require('../helpers/response.helper');
-const { StatusCodes } = require('../helpers/status-code.helper');
+import Joi from 'joi';
+import { errorResponse } from '../helpers/response.helper.js';
+import { StatusCodes } from '../helpers/status-code.helper.js';
 
 // Validation schemas
 const loginSchema = Joi.object({
@@ -180,7 +180,7 @@ const validateSchedule = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   validateLogin,
   validateRegister,
   validateUser,

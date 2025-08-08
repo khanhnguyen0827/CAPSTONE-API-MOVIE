@@ -1,10 +1,10 @@
-const express = require('express');
-const { 
-  getCinemaSystems, 
-  getCinemaClusters, 
-  getCinemaSchedules, 
-  getMovieSchedules 
-} = require('../controllers/cinema.controller');
+import express from 'express';
+import {
+  getCinemaSystems,
+  getCinemaClusters,
+  getCinemaSchedules,
+  getMovieSchedules
+} from '../controllers/cinema.controller.js';
 
 const router = express.Router();
 
@@ -233,4 +233,4 @@ router.get('/lay-thong-tin-lich-chieu-he-thong-rap/:maHeThongRap', getCinemaSche
  */
 router.get('/lay-thong-tin-lich-chieu-phim/:maPhim', getMovieSchedules);
 
-module.exports = router;
+export default router;

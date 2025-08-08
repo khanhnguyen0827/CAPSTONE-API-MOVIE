@@ -1,7 +1,7 @@
-const express = require('express');
-const { login, register, getUserInfo } = require('../controllers/auth.controller');
-const { validateLogin, validateRegister } = require('../common/validators/auth.validator');
-const { protect } = require('../common/middlewares/protect.middleware');
+import express from 'express';
+import { login, register, getUserInfo } from '../controllers/auth.controller.js';
+import { validateLogin, validateRegister } from '../common/validators/auth.validator.js';
+import { protect } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
@@ -142,4 +142,4 @@ router.post('/dang-ky', validateRegister, register);
  */
 router.get('/thong-tin-tai-khoan', protect, getUserInfo);
 
-module.exports = router;
+export default router;

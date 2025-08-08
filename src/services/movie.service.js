@@ -1,8 +1,6 @@
-const { PrismaClient } = require('@prisma/client');
-const fs = require('fs');
-const path = require('path');
-
-const prisma = new PrismaClient();
+import fs from 'fs';
+import path from 'path';
+import prisma from '../common/prisma/init.prisma.js';
 
 class MovieService {
   async getAllMovies() {
@@ -465,4 +463,4 @@ class MovieService {
   }
 }
 
-module.exports = new MovieService();
+export default new MovieService();

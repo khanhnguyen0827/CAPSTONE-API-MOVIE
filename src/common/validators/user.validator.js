@@ -1,5 +1,5 @@
-const Joi = require('joi');
-const { errorResponse } = require('../helpers/response.helper');
+import Joi from 'joi';
+import { errorResponse } from '../helpers/response.helper.js';
 
 const validateUser = (req, res, next) => {
   const schema = Joi.object({
@@ -65,7 +65,7 @@ const validateUserUpdate = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export {
   validateUser,
   validateUserUpdate
 };

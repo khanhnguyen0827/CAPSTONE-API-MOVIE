@@ -1,4 +1,4 @@
-const swaggerJsdoc = require('swagger-jsdoc');
+import swaggerJsdoc from 'swagger-jsdoc';
 
 const options = {
   definition: {
@@ -23,7 +23,14 @@ const options = {
         BearerAuth: {
           type: 'http',
           scheme: 'bearer',
-          bearerFormat: 'JWT'
+          bearerFormat: 'JWT',
+          description: 'Nhập token bearer'
+        },
+        TokenCybersoft: {
+          type: 'apiKey',
+          in: 'header',
+          name: 'TokenCybersoft',
+          description: 'Nhập token cybersoft'
         }
       },
       schemas: {
@@ -151,20 +158,21 @@ const options = {
         },
         BookingRequest: {
           type: 'object',
-          required: ['maLichChieu', 'danhSachVe', 'taiKhoan'],
+          required: ['maLichChieu', 'danhSachVe'],
           properties: {
-            maLichChieu: { type: 'integer', example: 1 },
+            maLichChieu: { type: 'integer', example: 0, description: 'Mã lịch chiếu' },
             danhSachVe: {
               type: 'array',
               items: {
                 type: 'object',
+                required: ['maGhe', 'giaVe'],
                 properties: {
-                  maGhe: { type: 'integer', example: 1 },
-                  giaVe: { type: 'number', example: 75000 }
+                  maGhe: { type: 'integer', example: 0, description: 'Mã ghế' },
+                  giaVe: { type: 'number', example: 0, description: 'Giá vé' }
                 }
-              }
-            },
-            taiKhoan: { type: 'string', example: 'user123' }
+              },
+              description: 'Danh sách vé'
+            }
           }
         },
         // Response schemas
@@ -331,6 +339,6 @@ const options = {
   ]
 };
 
-const specs = swaggerJsdoc(options);
+const swaggerSpecs = swaggerJsdoc(options);
 
-module.exports = specs;
+export default swaggerSpecs;

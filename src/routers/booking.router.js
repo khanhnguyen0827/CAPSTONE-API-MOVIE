@@ -1,22 +1,22 @@
-const express = require('express');
-const { 
-  getSeatList, 
-  bookTickets, 
-  createSchedule 
-} = require('../controllers/booking.controller');
-const { validateBooking, validateSchedule } = require('../common/validators/booking.validator');
-const { protect, adminOnly } = require('../common/middlewares/protect.middleware');
+import express from 'express';
+import {
+  getSeatList,
+  bookTickets,
+  createSchedule
+} from '../controllers/booking.controller.js';
+import { validateBooking, validateSchedule } from '../common/validators/booking.validator.js';
+import { protect, adminOnly } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
 /**
  * @swagger
- * /bookings/lay-danh-sach-ghe/{maLichChieu}:
+ * /api/QuanLyDatVe/LayDanhSachPhongVe:
  *   get:
- *     summary: Lấy danh sách ghế theo lịch chiếu
- *     tags: [Bookings]
+ *     summary: Lấy danh sách phòng vé theo lịch chiếu
+ *     tags: [QuanLyDatVe]
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: maLichChieu
  *         required: true
  *         schema:
@@ -25,7 +25,7 @@ const router = express.Router();
  *         description: Mã lịch chiếu
  *     responses:
  *       200:
- *         description: Lấy danh sách ghế thành công
+ *         description: Lấy danh sách phòng vé thành công
  *         content:
  *           application/json:
  *             schema:
@@ -36,7 +36,7 @@ const router = express.Router();
  *                   example: true
  *                 message:
  *                   type: string
- *                   example: Lấy danh sách ghế thành công
+ *                   example: Lấy danh sách phòng vé thành công
  *                 data:
  *                   type: object
  *                   properties:
@@ -67,6 +67,12 @@ const router = express.Router();
  *                       type: array
  *                       items:
  *                         $ref: '#/components/schemas/Seat'
+ *       400:
+ *         description: Mã lịch chiếu không được để trống
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Không tìm thấy lịch chiếu
  *         content:
@@ -80,20 +86,21 @@ const router = express.Router();
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.get('/lay-danh-sach-ghe/:maLichChieu', getSeatList);
+router.get('/LayDanhSachPhongVe', getSeatList);
 
 /**
  * @swagger
- * /bookings/dat-ve:
+ * /api/QuanLyDatVe/DatVe:
  *   post:
  *     summary: Đặt vé xem phim
- *     tags: [Bookings]
+ *     tags: [QuanLyDatVe]
  *     security:
  *       - BearerAuth: []
+ *       - TokenCybersoft: []
  *     requestBody:
  *       required: true
  *       content:
- *         application/json:
+ *         application/json-patch+json:
  *           schema:
  *             $ref: '#/components/schemas/BookingRequest'
  *     responses:
@@ -152,14 +159,14 @@ router.get('/lay-danh-sach-ghe/:maLichChieu', getSeatList);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/dat-ve', protect, validateBooking, bookTickets);
+router.post('/DatVe', protect, validateBooking, bookTickets);
 
 /**
  * @swagger
- * /bookings/tao-lich-chieu:
+ * /api/QuanLyDatVe/TaoLichChieu:
  *   post:
  *     summary: Tạo lịch chiếu mới (Chỉ admin)
- *     tags: [Bookings]
+ *     tags: [QuanLyDatVe]
  *     security:
  *       - BearerAuth: []
  *     requestBody:
@@ -253,6 +260,6 @@ router.post('/dat-ve', protect, validateBooking, bookTickets);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/tao-lich-chieu', protect, adminOnly, validateSchedule, createSchedule);
+router.post('/TaoLichChieu', protect, adminOnly, validateSchedule, createSchedule);
 
-module.exports = router;
+export default router;

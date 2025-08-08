@@ -1,5 +1,10 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get __dirname equivalent for ES modules
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 // Read custom CSS and JS files
 const customCSS = fs.readFileSync(path.join(__dirname, 'swagger-ui-custom.css'), 'utf8');
@@ -37,4 +42,4 @@ const swaggerUIOptions = {
   customCssUrl: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'
 };
 
-module.exports = swaggerUIOptions;
+export default swaggerUIOptions;

@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+import prisma from '../common/prisma/init.prisma.js';
 
 class BannerService {
   async getBanners() {
@@ -50,4 +48,4 @@ class BannerService {
   }
 }
 
-module.exports = new BannerService();
+export default new BannerService();

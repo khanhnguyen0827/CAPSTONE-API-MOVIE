@@ -1,5 +1,5 @@
-const cinemaService = require('../services/cinema.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import cinemaService from '../services/cinema.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const getCinemaSystems = async (req, res) => {
   try {
@@ -79,7 +79,7 @@ const getMovieSchedules = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getCinemaSystems,
   getCinemaClusters,
   getCinemaSchedules,

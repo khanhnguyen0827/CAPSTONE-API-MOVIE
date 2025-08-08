@@ -130,7 +130,7 @@ const validationErrorResponse = (res, errors) => {
   return badRequestResponse(res, 'Dữ liệu không hợp lệ', errors);
 };
 
-module.exports = {
+export {
   successResponse,
   errorResponse,
   paginationResponse,

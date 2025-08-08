@@ -1,9 +1,8 @@
-const { PrismaClient } = require('@prisma/client');
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const { successResponse, errorResponse, unauthorizedResponse } = require('../common/helpers/response.helper');
-
-const prisma = new PrismaClient();
+import bcrypt from 'bcryptjs';
+import jwt from 'jsonwebtoken';
+import { successResponse, errorResponse, unauthorizedResponse } from '../common/helpers/response.helper.js';
+import { JWT_CONFIG, API_MESSAGES, HTTP_STATUS } from '../common/constant/app.constant.js';
+import prisma from '../common/prisma/init.prisma.js';
 
 class AuthService {
   async login(taiKhoan, matKhau) {
@@ -39,13 +38,13 @@ class AuthService {
           taiKhoan: user.tai_khoan,
           loaiNguoiDung: user.loai_nguoi_dung
         },
-        process.env.JWT_SECRET,
-        { expiresIn: '24h' }
+        JWT_CONFIG.ACCESS_TOKEN_SECRET,
+        { expiresIn: JWT_CONFIG.ACCESS_TOKEN_EXPIRES_IN }
       );
 
       return {
         success: true,
-        message: 'Đăng nhập thành công',
+        message: API_MESSAGES.SUCCESS.LOGIN,
         data: {
           accessToken: token,
           user: {
@@ -171,4 +170,4 @@ class AuthService {
   }
 }
 
-module.exports = new AuthService();
+export default new AuthService();

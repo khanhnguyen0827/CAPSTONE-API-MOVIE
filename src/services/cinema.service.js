@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+import prisma from '../common/prisma/init.prisma.js';
 
 class CinemaService {
   async getCinemaSystems() {
@@ -230,4 +228,4 @@ class CinemaService {
   }
 }
 
-module.exports = new CinemaService();
+export default new CinemaService();

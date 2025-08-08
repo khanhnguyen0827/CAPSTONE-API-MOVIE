@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { PrismaClient } = require('@prisma/client');
-const { unauthorizedResponse } = require('../helpers/response.helper');
+import jwt from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
+import { unauthorizedResponse } from '../helpers/response.helper.js';
 
 const prisma = new PrismaClient();
 
@@ -159,7 +159,7 @@ const checkPermission = (permission) => {
   };
 };
 
-module.exports = {
+export {
   protect,
   optionalAuth,
   adminOnly,

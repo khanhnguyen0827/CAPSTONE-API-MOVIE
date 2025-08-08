@@ -175,7 +175,7 @@ const handleValidationError = (errors) => {
   return new ValidationError('Dữ liệu không hợp lệ', formattedErrors);
 };
 
-module.exports = {
+export {
   errorHandler,
   asyncHandler,
   handleDatabaseError,

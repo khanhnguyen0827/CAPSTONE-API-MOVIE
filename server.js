@@ -1,42 +1,42 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const compression = require('compression');
-const rateLimit = require('express-rate-limit');
-const morgan = require('morgan');
-const swaggerUi = require('swagger-ui-express');
-require('dotenv').config();
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
+import morgan from 'morgan';
+import swaggerUi from 'swagger-ui-express';
+
+// Import constants
+import { 
+  SERVER_CONFIG, 
+  RATE_LIMIT_CONFIG, 
+  UPLOAD_CONFIG 
+} from './src/common/constant/app.constant.js';
 
 // Import Swagger specs and setup
-const swaggerSpecs = require('./src/common/swagger/swagger.config');
-const swaggerUIOptions = require('./src/common/swagger/swagger-setup');
+import swaggerSpecs from './src/common/swagger/swagger.config.js';
+import swaggerUIOptions from './src/common/swagger/swagger-setup.js';
 
-// Import routes
-const rootRoutes = require('./src/routers/root.router');
-const authRoutes = require('./src/routers/auth.router');
-const movieRoutes = require('./src/routers/movie.router');
-const cinemaRoutes = require('./src/routers/cinema.router');
-const bookingRoutes = require('./src/routers/booking.router');
-const userRoutes = require('./src/routers/user.router');
-const bannerRoutes = require('./src/routers/banner.router');
+// Import parent router
+import rootRoutes from './src/routers/root.router.js';
 
 // Import middleware
-const { errorHandler } = require('./src/common/helpers/handle-err.helper');
+import { errorHandler } from './src/common/helpers/handle-err.helper.js';
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = SERVER_CONFIG.PORT;
 
 // Security middleware
 app.use(helmet());
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+  origin: SERVER_CONFIG.CORS_ORIGIN,
   credentials: true
 }));
 
 // Rate limiting
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 15 * 60 * 1000, // 15 minutes
-  max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100, // limit each IP to 100 requests per windowMs
+  windowMs: RATE_LIMIT_CONFIG.WINDOW_MS,
+  max: RATE_LIMIT_CONFIG.MAX_REQUESTS,
   message: {
     error: 'Too many requests from this IP, please try again later.'
   }
@@ -54,22 +54,14 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 // Static files
-app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(UPLOAD_CONFIG.UPLOAD_PATH));
 
 // Swagger Documentation
-const API_PREFIX = process.env.API_PREFIX || '/api/v1';
+const API_PREFIX = SERVER_CONFIG.API_PREFIX;
 app.use(`${API_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpecs, swaggerUIOptions));
 
-// Root Routes (health, status, info, ping, docs, api)
+// Parent Router (manages all child routers)
 app.use('/', rootRoutes);
-
-// API Routes
-app.use(`${API_PREFIX}/auth`, authRoutes);
-app.use(`${API_PREFIX}/movies`, movieRoutes);
-app.use(`${API_PREFIX}/cinemas`, cinemaRoutes);
-app.use(`${API_PREFIX}/bookings`, bookingRoutes);
-app.use(`${API_PREFIX}/users`, userRoutes);
-app.use(`${API_PREFIX}/banners`, bannerRoutes);
 
 // 404 handler
 app.use('*', (req, res) => {
@@ -100,5 +92,5 @@ process.on('SIGINT', () => {
   process.exit(0);
 });
 
-module.exports = app;
+export default app;
 

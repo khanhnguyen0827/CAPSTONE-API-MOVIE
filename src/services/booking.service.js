@@ -1,6 +1,4 @@
-const { PrismaClient } = require('@prisma/client');
-
-const prisma = new PrismaClient();
+import prisma from '../common/prisma/init.prisma.js';
 
 class BookingService {
   async getSeatList(maLichChieu) {
@@ -279,4 +277,4 @@ class BookingService {
   }
 }
 
-module.exports = new BookingService();
+export default new BookingService();

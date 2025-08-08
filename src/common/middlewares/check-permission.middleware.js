@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client');
-const { forbiddenResponse } = require('../helpers/response.helper');
+import { PrismaClient } from '@prisma/client';
+import { forbiddenResponse } from '../helpers/response.helper.js';
 
 const prisma = new PrismaClient();
 
@@ -174,7 +174,7 @@ const userRateLimit = (maxRequests = 100, windowMs = 15 * 60 * 1000) => {
   };
 };
 
-module.exports = {
+export {
   checkPermission,
   checkResourceOwnership,
   requireRole,

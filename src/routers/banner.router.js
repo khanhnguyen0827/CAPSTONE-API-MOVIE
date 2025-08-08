@@ -1,5 +1,5 @@
-const express = require('express');
-const { getBanners } = require('../controllers/banner.controller');
+import express from 'express';
+import { getBanners } from '../controllers/banner.controller.js';
 
 const router = express.Router();
 
@@ -39,4 +39,4 @@ const router = express.Router();
  */
 router.get('/lay-danh-sach-banner', getBanners);
 
-module.exports = router;
+export default router;

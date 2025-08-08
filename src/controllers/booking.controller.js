@@ -1,5 +1,5 @@
-const bookingService = require('../services/booking.service');
-const { successResponse, errorResponse } = require('../common/helpers/response.helper');
+import bookingService from '../services/booking.service.js';
+import { successResponse, errorResponse } from '../common/helpers/response.helper.js';
 
 const getSeatList = async (req, res) => {
   try {
@@ -18,7 +18,7 @@ const getSeatList = async (req, res) => {
     }
   } catch (error) {
     console.error('Get seat list controller error:', error);
-    return errorResponse(res, 'Lỗi lấy danh sách ghế', 500);
+    return errorResponse(res, 'Lỗi lấy danh sách phòng vé', 500);
   }
 };
 
@@ -60,7 +60,7 @@ const createSchedule = async (req, res) => {
   }
 };
 
-module.exports = {
+export {
   getSeatList,
   bookTickets,
   createSchedule
