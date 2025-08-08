@@ -6,6 +6,7 @@ import {
 } from '../controllers/booking.controller.js';
 import { validateBooking, validateSchedule } from '../common/validators/booking.validator.js';
 import { protect, adminOnly } from '../common/middlewares/protect.middleware.js';
+import { validateCybersoftToken } from '../common/middlewares/cybersoft-token.middleware.js';
 
 const router = express.Router();
 
@@ -159,7 +160,7 @@ router.get('/LayDanhSachPhongVe', getSeatList);
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-router.post('/DatVe', protect, validateBooking, bookTickets);
+router.post('/DatVe', protect, validateCybersoftToken, validateBooking, bookTickets);
 
 /**
  * @swagger

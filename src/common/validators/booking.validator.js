@@ -24,10 +24,6 @@ const validateBooking = (req, res, next) => {
     ).min(1).required().messages({
       'array.min': 'Phải chọn ít nhất 1 vé',
       'any.required': 'Danh sách vé là bắt buộc'
-    }),
-    taiKhoan: Joi.string().required().messages({
-      'string.empty': 'Tài khoản không được để trống',
-      'any.required': 'Tài khoản là bắt buộc'
     })
   });
 
