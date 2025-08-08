@@ -1,0 +1,253 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Movie Ticketing System Models
+
+model Banner {
+  ma_banner    Int      @id @default(autoincrement())
+  ma_phim      Int
+  hinh_anh     String   @db.VarChar(500)
+  created_at   DateTime @default(now()) @db.Timestamp(0)
+  updated_at   DateTime @default(now()) @db.Timestamp(0)
+  Phim         Phim     @relation(fields: [ma_phim], references: [ma_phim], onDelete: Cascade)
+
+  @@index([ma_phim])
+}
+
+model Phim {
+  ma_phim         Int       @id @default(autoincrement())
+  ten_phim        String    @db.VarChar(255)
+  trailer         String?   @db.VarChar(500)
+  hinh_anh        String?   @db.VarChar(500)
+  mo_ta           String?   @db.Text
+  ngay_khoi_chieu DateTime? @db.Date
+  danh_gia        Int       @default(0)
+  hot             Boolean   @default(false)
+  dang_chieu      Boolean   @default(false)
+  sap_chieu       Boolean   @default(false)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  Banner          Banner[]
+  LichChieu       LichChieu[]
+
+  @@index([ngay_khoi_chieu])
+  @@index([dang_chieu])
+  @@index([sap_chieu])
+}
+
+model HeThongRap {
+  ma_he_thong_rap Int       @id @default(autoincrement())
+  ten_he_thong_rap String   @db.VarChar(255)
+  logo            String?   @db.VarChar(500)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  CumRap          CumRap[]
+
+  @@map("HeThongRap")
+}
+
+model CumRap {
+  ma_cum_rap      Int       @id @default(autoincrement())
+  ten_cum_rap     String    @db.VarChar(255)
+  dia_chi         String?   @db.VarChar(500)
+  ma_he_thong_rap Int
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  HeThongRap      HeThongRap @relation(fields: [ma_he_thong_rap], references: [ma_he_thong_rap], onDelete: Cascade)
+  RapPhim         RapPhim[]
+
+  @@index([ma_he_thong_rap])
+  @@map("CumRap")
+}
+
+model RapPhim {
+  ma_rap          Int       @id @default(autoincrement())
+  ten_rap         String    @db.VarChar(255)
+  ma_cum_rap      Int
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  CumRap          CumRap    @relation(fields: [ma_cum_rap], references: [ma_cum_rap], onDelete: Cascade)
+  LichChieu       LichChieu[]
+  Ghe             Ghe[]
+
+  @@index([ma_cum_rap])
+  @@map("RapPhim")
+}
+
+model NguoiDung {
+  tai_khoan       Int       @id @default(autoincrement())
+  ho_ten          String    @db.VarChar(255)
+  email           String    @unique @db.VarChar(255)
+  so_dt           String?   @db.VarChar(20)
+  mat_khau        String    @db.VarChar(255)
+  loai_nguoi_dung String    @default("KhachHang") @db.VarChar(50)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  DatVe           DatVe[]
+
+  @@index([email])
+  @@map("NguoiDung")
+}
+
+model LichChieu {
+  ma_lich_chieu   Int       @id @default(autoincrement())
+  ma_rap          Int
+  ma_phim         Int
+  ngay_gio_chieu  DateTime
+  gia_ve          Decimal   @db.Decimal(10, 2)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  RapPhim         RapPhim   @relation(fields: [ma_rap], references: [ma_rap], onDelete: Cascade)
+  Phim            Phim      @relation(fields: [ma_phim], references: [ma_phim], onDelete: Cascade)
+  DatVe           DatVe[]
+
+  @@index([ma_rap])
+  @@index([ma_phim])
+  @@index([ngay_gio_chieu])
+  @@map("LichChieu")
+}
+
+model Ghe {
+  ma_ghe          Int       @id @default(autoincrement())
+  ten_ghe         String    @db.VarChar(50)
+  loai_ghe        String    @default("Thuong") @db.VarChar(50)
+  ma_rap          Int
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  RapPhim         RapPhim   @relation(fields: [ma_rap], references: [ma_rap], onDelete: Cascade)
+  DatVe           DatVe[]
+
+  @@index([ma_rap])
+  @@map("Ghe")
+}
+
+model DatVe {
+  tai_khoan       Int
+  ma_lich_chieu   Int
+  ma_ghe          Int
+  ngay_dat_ve     DateTime  @default(now()) @db.Timestamp(0)
+  trang_thai      String    @default("DaDat") @db.VarChar(50)
+  created_at      DateTime  @default(now()) @db.Timestamp(0)
+  updated_at      DateTime  @default(now()) @db.Timestamp(0)
+  NguoiDung       NguoiDung @relation(fields: [tai_khoan], references: [tai_khoan], onDelete: Cascade)
+  LichChieu       LichChieu @relation(fields: [ma_lich_chieu], references: [ma_lich_chieu], onDelete: Cascade)
+  Ghe             Ghe       @relation(fields: [ma_ghe], references: [ma_ghe], onDelete: Cascade)
+
+  @@id([tai_khoan, ma_lich_chieu, ma_ghe])
+  @@index([tai_khoan])
+  @@index([ma_lich_chieu])
+  @@index([ma_ghe])
+  @@index([ngay_dat_ve])
+  @@map("DatVe")
+}
+
+// Existing Models (keeping for compatibility)
+
+model Articles {
+  id        Int       @id @default(autoincrement())
+  title     String?   @db.VarChar(255)
+  content   String?   @db.Text
+  imageUrl  String?   @db.VarChar(500)
+  views     Int       @default(0)
+  userId    Int
+  deletedBy Int       @default(0)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+}
+
+model Chats {
+  id        Int       @id @default(autoincrement())
+  message   String?   @db.Text
+  userId    Int
+  roomId    String    @db.VarChar(255)
+  deletedBy Int       @default(0)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+  Users     Users     @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Chats_ibfk_1")
+
+  @@index([userId], map: "userId")
+}
+
+model Permissions {
+  id             Int              @id @default(autoincrement())
+  name           String           @db.VarChar(255)
+  endpoint       String           @db.VarChar(255)
+  method         String           @db.VarChar(100)
+  module         String           @db.VarChar(100)
+  deletedBy      Int              @default(0)
+  isDeleted      Boolean          @default(false)
+  deletedAt      DateTime         @default(now()) @db.Timestamp(0)
+  createdAt      DateTime         @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime         @default(now()) @db.Timestamp(0)
+  RolePermission RolePermission[]
+}
+
+model RolePermission {
+  id           Int         @id @default(autoincrement())
+  roleId       Int
+  permissionId Int
+  isActive     Boolean?    @default(true)
+  deletedBy    Int         @default(0)
+  isDeleted    Boolean     @default(false)
+  deletedAt    DateTime?   @db.Timestamp(0)
+  createdAt    DateTime    @default(now()) @db.Timestamp(0)
+  updatedAt    DateTime    @default(now()) @db.Timestamp(0)
+  Roles        Roles       @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "RolePermission_ibfk_1")
+  Permissions  Permissions @relation(fields: [permissionId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "RolePermission_ibfk_2")
+
+  @@index([permissionId], map: "permissionId")
+  @@index([roleId], map: "roleId")
+}
+
+model Roles {
+  id             Int              @id @default(autoincrement())
+  name           String?          @db.VarChar(255)
+  description    String?          @db.VarChar(255)
+  isActive       Boolean?         @default(true)
+  deletedBy      Int              @default(0)
+  isDeleted      Boolean          @default(false)
+  deletedAt      DateTime?        @db.Timestamp(0)
+  createdAt      DateTime         @default(now()) @db.Timestamp(0)
+  updatedAt      DateTime         @default(now()) @db.Timestamp(0)
+  RolePermission RolePermission[]
+  Users          Users[]
+}
+
+model TABLE_TEMPLATE {
+  id        Int       @id @default(autoincrement())
+  deletedBy Int       @default(0)
+  isDeleted Boolean   @default(false)
+  deletedAt DateTime? @db.Timestamp(0)
+  createdAt DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt DateTime  @default(now()) @db.Timestamp(0)
+}
+
+model Users {
+  id         Int       @id @default(autoincrement())
+  email      String    @unique(map: "email") @db.VarChar(255)
+  fullName   String?   @db.VarChar(255)
+  avatar     String?   @db.VarChar(255)
+  password   String?   @db.VarChar(255)
+  facebookId String?   @unique(map: "facebookId") @db.VarChar(255)
+  googleId   String?   @unique(map: "googleId") @db.VarChar(255)
+  roleId     Int       @default(2)
+  deletedBy  Int       @default(0)
+  isDeleted  Boolean   @default(false)
+  deletedAt  DateTime? @db.Timestamp(0)
+  createdAt  DateTime  @default(now()) @db.Timestamp(0)
+  updatedAt  DateTime  @default(now()) @db.Timestamp(0)
+  Chats      Chats[]
+  Roles      Roles     @relation(fields: [roleId], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "Users_ibfk_1")
+
+  @@index([roleId], map: "roleId")
+}
