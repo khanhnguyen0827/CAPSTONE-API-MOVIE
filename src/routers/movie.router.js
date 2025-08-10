@@ -529,4 +529,11 @@ router.delete('/xoa-phim/:maPhim', protect, adminOnly, deleteMovie);
  */
 router.post('/upload-hinh-anh', protect, adminOnly, upload.single('hinhAnh'), uploadImage);
 
+// RESTful route aliases for testing compatibility
+router.get('/', protect, getMovies); // GET /api/v1/movies
+router.post('/', protect, adminOnly, upload.single('hinhAnh'), validateMovie, createMovie); // POST /api/v1/movies
+router.get('/:id', protect, getMovieById); // GET /api/v1/movies/:id
+router.put('/:id', protect, adminOnly, upload.single('hinhAnh'), validateMovieUpdate, updateMovie); // PUT /api/v1/movies/:id
+router.delete('/:id', protect, adminOnly, deleteMovie); // DELETE /api/v1/movies/:id
+
 export default router;

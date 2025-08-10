@@ -115,19 +115,38 @@ class BookingService {
         };
       }
 
-      // Check if seats are available
+      // Check if seats are available and book atomically
       const seatIds = danhSachVe.map(ve => ve.maGhe);
-      
-      const existingBookings = await prisma.datVe.findMany({
-        where: {
-          ma_lich_chieu: parseInt(maLichChieu),
-          ma_ghe: {
-            in: seatIds
+
+      const result = await prisma.$transaction(async (tx) => {
+        // Lock existing bookings check inside transaction
+        const existing = await tx.datVe.findMany({
+          where: {
+            ma_lich_chieu: parseInt(maLichChieu),
+            ma_ghe: { in: seatIds }
           }
+        });
+
+        if (existing.length > 0) {
+          return { conflict: true };
         }
+
+        const created = await Promise.all(
+          danhSachVe.map(ve =>
+            tx.datVe.create({
+              data: {
+                ma_lich_chieu: parseInt(maLichChieu),
+                ma_ghe: ve.maGhe,
+                tai_khoan: taiKhoan,
+                // Store price at booking time if schema supports; else omit
+              }
+            })
+          )
+        );
+        return { created };
       });
 
-      if (existingBookings.length > 0) {
+      if (result.conflict) {
         return {
           success: false,
           message: 'Một số ghế đã được đặt',
@@ -135,28 +154,14 @@ class BookingService {
         };
       }
 
-      // Create bookings
-      const bookings = await Promise.all(
-        danhSachVe.map(ve => 
-          prisma.datVe.create({
-            data: {
-              ma_lich_chieu: parseInt(maLichChieu),
-              ma_ghe: ve.maGhe,
-              tai_khoan: taiKhoan,
-              gia_ve: ve.giaVe
-            }
-          })
-        )
-      );
-
       return {
         success: true,
         message: 'Đặt vé thành công',
         data: {
           maLichChieu: parseInt(maLichChieu),
-          danhSachVe: bookings.map(booking => ({
+          danhSachVe: result.created.map(booking => ({
             maGhe: booking.ma_ghe,
-            giaVe: booking.gia_ve
+            giaVe: danhSachVe.find(v => v.maGhe === booking.ma_ghe)?.giaVe || undefined
           }))
         }
       };

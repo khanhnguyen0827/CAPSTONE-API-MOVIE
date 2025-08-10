@@ -5,6 +5,7 @@ import {
   getCinemaSchedules,
   getMovieSchedules
 } from '../controllers/cinema.controller.js';
+import { protect } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
@@ -232,5 +233,10 @@ router.get('/lay-thong-tin-lich-chieu-he-thong-rap/:maHeThongRap', getCinemaSche
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/lay-thong-tin-lich-chieu-phim/:maPhim', getMovieSchedules);
+
+// RESTful route aliases for testing compatibility
+router.get('/', protect, getCinemaSystems); // GET /api/v1/cinemas
+router.get('/systems', protect, getCinemaSystems); // GET /api/v1/cinemas/systems
+router.get('/clusters', protect, getCinemaClusters); // GET /api/v1/cinemas/clusters
 
 export default router;

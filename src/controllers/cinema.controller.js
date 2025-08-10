@@ -24,7 +24,13 @@ const getCinemaClusters = async (req, res) => {
       return errorResponse(res, 'Mã hệ thống rạp không được để trống', 400);
     }
 
-    const result = await cinemaService.getCinemaClusters(maHeThongRap);
+    // Convert string to integer for database query
+    const maHeThongRapInt = parseInt(maHeThongRap, 10);
+    if (isNaN(maHeThongRapInt)) {
+      return errorResponse(res, 'Mã hệ thống rạp không hợp lệ', 400);
+    }
+
+    const result = await cinemaService.getCinemaClusters(maHeThongRapInt);
 
     if (result.success) {
       return successResponse(res, result.message, result.data);
@@ -45,7 +51,13 @@ const getCinemaSchedules = async (req, res) => {
       return errorResponse(res, 'Mã hệ thống rạp không được để trống', 400);
     }
 
-    const result = await cinemaService.getCinemaSchedules(maHeThongRap);
+    // Convert string to integer for database query
+    const maHeThongRapInt = parseInt(maHeThongRap, 10);
+    if (isNaN(maHeThongRapInt)) {
+      return errorResponse(res, 'Mã hệ thống rạp không hợp lệ', 400);
+    }
+
+    const result = await cinemaService.getCinemaSchedules(maHeThongRapInt);
 
     if (result.success) {
       return successResponse(res, result.message, result.data);
@@ -66,7 +78,13 @@ const getMovieSchedules = async (req, res) => {
       return errorResponse(res, 'Mã phim không được để trống', 400);
     }
 
-    const result = await cinemaService.getMovieSchedules(maPhim);
+    // Convert string to integer for database query
+    const maPhimInt = parseInt(maPhim, 10);
+    if (isNaN(maPhimInt)) {
+      return errorResponse(res, 'Mã phim không hợp lệ', 400);
+    }
+
+    const result = await cinemaService.getMovieSchedules(maPhimInt);
 
     if (result.success) {
       return successResponse(res, result.message, result.data);

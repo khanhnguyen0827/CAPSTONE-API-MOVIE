@@ -1,5 +1,6 @@
 import express from 'express';
 import { getBanners } from '../controllers/banner.controller.js';
+import { protect } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
@@ -38,5 +39,8 @@ const router = express.Router();
  *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/lay-danh-sach-banner', getBanners);
+
+// RESTful route aliases for testing compatibility
+router.get('/', protect, getBanners); // GET /api/v1/banners
 
 export default router;

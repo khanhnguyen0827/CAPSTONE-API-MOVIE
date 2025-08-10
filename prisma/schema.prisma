@@ -79,7 +79,7 @@ model RapPhim {
 }
 
 model NguoiDung {
-  tai_khoan       Int       @id @default(autoincrement())
+  tai_khoan       String    @id @db.VarChar(50)
   ho_ten          String    @db.VarChar(255)
   email           String    @unique(map: "email") @db.VarChar(255)
   so_dt           String?   @db.VarChar(20)
@@ -126,7 +126,7 @@ model Ghe {
 }
 
 model DatVe {
-  tai_khoan     Int
+  tai_khoan     String
   ma_lich_chieu Int
   ma_ghe        Int
   ngay_dat_ve   DateTime? @default(now()) @db.Timestamp(0)
@@ -138,6 +138,7 @@ model DatVe {
   Ghe           Ghe       @relation(fields: [ma_ghe], references: [ma_ghe], onDelete: Cascade, onUpdate: NoAction, map: "DatVe_ibfk_3")
 
   @@id([tai_khoan, ma_lich_chieu, ma_ghe])
+  @@unique([ma_lich_chieu, ma_ghe], map: "uniq_dat_ve_lich_ghe")
   @@index([ngay_dat_ve], map: "idx_dat_ve_ngay_dat")
   @@index([ma_ghe], map: "ma_ghe")
   @@index([ma_lich_chieu], map: "ma_lich_chieu")

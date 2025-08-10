@@ -12,6 +12,13 @@ const router = express.Router();
 
 /**
  * @swagger
+ * tags:
+ *   - name: QuanLyDatVe
+ *     description: Quản lý đặt vé (legacy-compatible)
+ */
+
+/**
+ * @swagger
  * /api/QuanLyDatVe/LayDanhSachPhongVe:
  *   get:
  *     summary: Lấy danh sách phòng vé theo lịch chiếu
@@ -20,9 +27,7 @@ const router = express.Router();
  *       - in: query
  *         name: maLichChieu
  *         required: true
- *         schema:
- *           type: integer
- *           example: 1
+ *         schema: { type: integer, example: 1 }
  *         description: Mã lịch chiếu
  *     responses:
  *       200:
@@ -32,60 +37,38 @@ const router = express.Router();
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Lấy danh sách phòng vé thành công
+ *                 success: { type: boolean, example: true }
+ *                 message: { type: string, example: "Lấy danh sách phòng vé thành công" }
  *                 data:
  *                   type: object
  *                   properties:
  *                     thongTinPhim:
  *                       type: object
  *                       properties:
- *                         maPhim:
- *                           type: integer
- *                           example: 1
- *                         tenPhim:
- *                           type: string
- *                           example: 'Avengers: Endgame'
- *                         hinhAnh:
- *                           type: string
- *                           example: 'avengers.jpg'
- *                         ngayChieu:
- *                           type: string
- *                           format: date-time
- *                           example: '2024-01-15T14:00:00Z'
- *                         gioChieu:
- *                           type: string
- *                           format: date-time
- *                           example: '2024-01-15T14:00:00Z'
- *                         giaVe:
- *                           type: number
- *                           example: 75000
+ *                         maPhim: { type: integer, example: 1 }
+ *                         tenPhim: { type: string, example: "Avengers: Endgame" }
+ *                         hinhAnh: { type: string, example: "avengers.jpg" }
+ *                         ngayChieu: { type: string, example: "2024-01-15" }
+ *                         gioChieu: { type: string, example: "14:00" }
+ *                         tenRap: { type: string, example: "Rạp 1" }
+ *                         tenCumRap: { type: string, example: "BHD Star Bitexco" }
+ *                         tenHeThongRap: { type: string, example: "BHD Star Cineplex" }
  *                     danhSachGhe:
  *                       type: array
  *                       items:
- *                         $ref: '#/components/schemas/Seat'
+ *                         type: object
+ *                         properties:
+ *                           maGhe: { type: integer, example: 1 }
+ *                           tenGhe: { type: string, example: "A1" }
+ *                           loaiGhe: { type: string, example: "Vip" }
+ *                           giaGhe: { type: number, example: 75000 }
+ *                           trangThai: { type: string, example: "Trống" }
  *       400:
  *         description: Mã lịch chiếu không được để trống
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Không tìm thấy lịch chiếu
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Lỗi server
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.get('/LayDanhSachPhongVe', getSeatList);
 
@@ -101,9 +84,33 @@ router.get('/LayDanhSachPhongVe', getSeatList);
  *     requestBody:
  *       required: true
  *       content:
- *         application/json-patch+json:
+ *         application/json:
  *           schema:
- *             $ref: '#/components/schemas/BookingRequest'
+ *             type: object
+ *             required: [maLichChieu, danhSachGhe]
+ *             properties:
+ *               maLichChieu:
+ *                 type: integer
+ *                 example: 1
+ *                 description: Mã lịch chiếu
+ *               danhSachGhe:
+ *                 type: array
+ *                 items:
+ *                   type: object
+ *                   required: [maGhe]
+ *                   properties:
+ *                     maGhe:
+ *                       type: integer
+ *                       example: 1
+ *                       description: Mã ghế
+ *                     giaGhe:
+ *                       type: number
+ *                       example: 75000
+ *                       description: Giá ghế
+ *               taiKhoanNguoiDung:
+ *                 type: string
+ *                 example: "user123"
+ *                 description: Tài khoản người dùng đặt vé
  *     responses:
  *       200:
  *         description: Đặt vé thành công
@@ -112,53 +119,25 @@ router.get('/LayDanhSachPhongVe', getSeatList);
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Đặt vé thành công
+ *                 success: { type: boolean, example: true }
+ *                 message: { type: string, example: "Đặt vé thành công" }
  *                 data:
  *                   type: object
  *                   properties:
- *                     maLichChieu:
- *                       type: integer
- *                       example: 1
- *                     danhSachVe:
- *                       type: array
- *                       items:
- *                         type: object
- *                         properties:
- *                           maGhe:
- *                             type: integer
- *                             example: 1
- *                           giaVe:
- *                             type: number
- *                             example: 75000
+ *                     maDatVe: { type: integer, example: 1 }
+ *                     maLichChieu: { type: integer, example: 1 }
+ *                     maGhe: { type: integer, example: 1 }
+ *                     taiKhoanNguoiDung: { type: string, example: "user123" }
+ *                     ngayDat: { type: string, format: date-time, example: "2024-01-15T14:00:00Z" }
+ *                     giaVe: { type: number, example: 75000 }
  *       400:
  *         description: Dữ liệu không hợp lệ hoặc ghế đã được đặt
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Không có quyền truy cập
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Không tìm thấy lịch chiếu hoặc người dùng
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Lỗi server
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/DatVe', protect, validateCybersoftToken, validateBooking, bookTickets);
 
@@ -176,11 +155,7 @@ router.post('/DatVe', protect, validateCybersoftToken, validateBooking, bookTick
  *         application/json:
  *           schema:
  *             type: object
- *             required:
- *               - maRap
- *               - maPhim
- *               - ngayGioChieu
- *               - giaVe
+ *             required: [maRap, maPhim, ngayGioChieu, giaVe]
  *             properties:
  *               maRap:
  *                 type: integer
@@ -207,60 +182,30 @@ router.post('/DatVe', protect, validateCybersoftToken, validateBooking, bookTick
  *             schema:
  *               type: object
  *               properties:
- *                 success:
- *                   type: boolean
- *                   example: true
- *                 message:
- *                   type: string
- *                   example: Tạo lịch chiếu thành công
+ *                 success: { type: boolean, example: true }
+ *                 message: { type: string, example: "Tạo lịch chiếu thành công" }
  *                 data:
  *                   type: object
  *                   properties:
- *                     maLichChieu:
- *                       type: integer
- *                       example: 1
- *                     maRap:
- *                       type: integer
- *                       example: 1
- *                     maPhim:
- *                       type: integer
- *                       example: 1
- *                     ngayGioChieu:
- *                       type: string
- *                       format: date-time
- *                       example: '2024-01-15T14:00:00Z'
- *                     giaVe:
- *                       type: number
- *                       example: 75000
- *                     phim:
- *                       $ref: '#/components/schemas/Movie'
- *                     rapPhim:
- *                       $ref: '#/components/schemas/Theater'
+ *                     maLichChieu: { type: integer, example: 1 }
+ *                     maRap: { type: integer, example: 1 }
+ *                     maPhim: { type: integer, example: 1 }
+ *                     ngayGioChieu: { type: string, format: date-time, example: "2024-01-15T14:00:00Z" }
+ *                     giaVe: { type: number, example: 75000 }
  *       400:
  *         description: Dữ liệu không hợp lệ hoặc lịch chiếu đã tồn tại
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       401:
  *         description: Không có quyền truy cập
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       404:
  *         description: Không tìm thấy rạp phim hoặc phim
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  *       500:
  *         description: Lỗi server
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/ErrorResponse'
  */
 router.post('/TaoLichChieu', protect, adminOnly, validateSchedule, createSchedule);
+
+// RESTful route aliases for testing compatibility
+router.get('/seats', getSeatList); // GET /api/v1/bookings/seats
+router.post('/tickets', protect, validateCybersoftToken, validateBooking, bookTickets); // POST /api/v1/bookings/tickets
+router.post('/schedules', protect, adminOnly, validateSchedule, createSchedule); // POST /api/v1/bookings/schedules
 
 export default router;

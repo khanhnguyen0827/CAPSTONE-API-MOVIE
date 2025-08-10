@@ -56,7 +56,7 @@ const getMoviesByDate = async (req, res) => {
 
 const getMovieById = async (req, res) => {
   try {
-    const { maPhim } = req.query;
+    const maPhim = req.query?.maPhim || req.params?.maPhim || req.body?.maPhim;
 
     if (!maPhim) {
       return errorResponse(res, 'Mã phim không được để trống', 400);
@@ -145,7 +145,7 @@ const uploadImage = async (req, res) => {
 
 const deleteMovie = async (req, res) => {
   try {
-    const { maPhim } = req.body;
+    const maPhim = req.query?.maPhim || req.params?.maPhim || req.body?.maPhim;
 
     const result = await movieService.deleteMovie(maPhim);
 

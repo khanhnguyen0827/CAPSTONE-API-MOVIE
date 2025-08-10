@@ -554,4 +554,11 @@ router.put('/cap-nhat-nguoi-dung/:taiKhoan', protect, adminOnly, validateUserUpd
  */
 router.delete('/xoa-nguoi-dung/:taiKhoan', protect, adminOnly, deleteUser);
 
+// RESTful route aliases for testing compatibility
+router.get('/', protect, adminOnly, getUsers); // GET /api/v1/users
+router.post('/', protect, adminOnly, validateUser, createUser); // POST /api/v1/users
+router.get('/:id', protect, adminOnly, getUserById); // GET /api/v1/users/:id
+router.put('/:id', protect, adminOnly, validateUserUpdate, updateUser); // PUT /api/v1/users/:id
+router.delete('/:id', protect, adminOnly, deleteUser); // DELETE /api/v1/users/:id
+
 export default router;

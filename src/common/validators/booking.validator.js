@@ -27,7 +27,7 @@ const validateBooking = (req, res, next) => {
     })
   });
 
-  const { error } = schema.validate(req.body);
+  const { error } = schema.validate(req.body, { abortEarly: true, stripUnknown: true });
   if (error) {
     return errorResponse(res, error.details[0].message, 400);
   }
