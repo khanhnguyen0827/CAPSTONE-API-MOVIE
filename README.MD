@@ -48,7 +48,7 @@ A comprehensive REST API for a movie ticketing system built with Node.js, Expres
    Create a `.env` file in the root directory with the following variables:
    ```env
    # Database Configuration
-   DATABASE_URL="mysql://username:password@localhost:3306/movie_ticketing_system"
+   DATABASE_URL="mysql://root:123456@localhost:3306/movie_ticketing_system"
    
    # Server Configuration
    PORT=3000
