@@ -62,6 +62,34 @@ const PAGINATION_CONFIG = {
   MAX_LIMIT: 100
 };
 
+// Swagger/UI Configuration
+const SWAGGER_CONFIG = {
+  TITLE: process.env.SWAGGER_TITLE || 'Movie Ticketing API',
+  SUBTITLE: process.env.SWAGGER_SUBTITLE || 'Interactive API Documentation',
+  VERSION: process.env.SWAGGER_VERSION || '1.0.0',
+  DESCRIPTION:
+    process.env.SWAGGER_DESCRIPTION || 'API documentation for Movie Ticketing System',
+  LOGO_URL: process.env.SWAGGER_LOGO_URL || '',
+  FAVICON_URL: process.env.SWAGGER_FAVICON_URL || '',
+  COLORS: {
+    PRIMARY: process.env.SWAGGER_PRIMARY_COLOR || '#667eea',
+    SECONDARY: process.env.SWAGGER_SECONDARY_COLOR || '#764ba2',
+  },
+  UI: {
+    DOC_EXPANSION: process.env.SWAGGER_DOC_EXPANSION || 'list', // none | list | full
+    TRY_IT_OUT: (process.env.SWAGGER_TRY_IT_OUT || 'true').toLowerCase() === 'true',
+    TAGS_SORTER: process.env.SWAGGER_TAGS_SORTER || 'alpha', // alpha | method | etc.
+    OPERATIONS_SORTER: process.env.SWAGGER_OPERATIONS_SORTER || 'method',
+    TAG_ORDER: (process.env.SWAGGER_TAG_ORDER || 'Root,Authentication,Movies,Cinemas,QuanLyDatVe,Users,Banners')
+      .split(',')
+      .map((s) => s.trim())
+  },
+  SERVERS: {
+    STAGING_URL: process.env.SWAGGER_SERVER_STAGING_URL || '',
+    PROD_URL: process.env.SWAGGER_SERVER_PROD_URL || '',
+  },
+};
+
 // API Response Messages
 const API_MESSAGES = {
   SUCCESS: {
@@ -143,5 +171,6 @@ export {
   USER_ROLES,
   MOVIE_STATUS,
   BOOKING_STATUS,
-  SEAT_TYPES
+  SEAT_TYPES,
+  SWAGGER_CONFIG
 };

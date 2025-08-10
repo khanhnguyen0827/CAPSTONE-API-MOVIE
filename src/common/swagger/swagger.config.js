@@ -1,12 +1,13 @@
 import swaggerJsdoc from 'swagger-jsdoc';
+import { SERVER_CONFIG, SWAGGER_CONFIG } from '../constant/app.constant.js';
 
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
-      title: 'Movie Ticketing API',
-      version: '1.0.0',
-      description: 'API documentation for Movie Ticketing System',
+      title: SWAGGER_CONFIG.TITLE,
+      version: SWAGGER_CONFIG.VERSION,
+      description: SWAGGER_CONFIG.DESCRIPTION,
       contact: {
         name: 'API Support',
         email: 'support@movieticketing.com'
@@ -14,9 +15,15 @@ const options = {
     },
     servers: [
       {
-        url: 'http://localhost:3000/api/v1',
+        url: `http://localhost:${SERVER_CONFIG.PORT}${SERVER_CONFIG.API_PREFIX}`,
         description: 'Development server'
-      }
+      },
+      ...(SWAGGER_CONFIG.SERVERS.STAGING_URL
+        ? [{ url: SWAGGER_CONFIG.SERVERS.STAGING_URL, description: 'Staging server' }]
+        : []),
+      ...(SWAGGER_CONFIG.SERVERS.PROD_URL
+        ? [{ url: SWAGGER_CONFIG.SERVERS.PROD_URL, description: 'Production server' }]
+        : [])
     ],
     components: {
       securitySchemes: {

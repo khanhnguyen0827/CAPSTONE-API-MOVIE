@@ -32,18 +32,18 @@ function addCustomHeader() {
     const headerContent = `
       <div class="custom-header">
         <div class="header-left">
-          <div class="logo">
+          <div class="logo">${window.__SWAGGER_BRAND?.logoUrl ? `<img src="${window.__SWAGGER_BRAND.logoUrl}" alt="logo" style="height:28px"/>` : `
             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M16 2L20.472 10.944L30 12.472L22.5 19.528L24.944 29L16 24.472L7.056 29L9.5 19.528L2 12.472L11.528 10.944L16 2Z" fill="white"/>
-            </svg>
+            </svg>`}
           </div>
           <div class="header-text">
-            <h1>Movie Ticketing API</h1>
-            <p>Interactive API Documentation</p>
+            <h1>${window.__SWAGGER_BRAND?.title || 'Movie Ticketing API'}</h1>
+            <p>${window.__SWAGGER_BRAND?.subtitle || 'Interactive API Documentation'}</p>
           </div>
         </div>
         <div class="header-right">
-          <div class="version-badge">v1.0.0</div>
+          <div class="version-badge">v${window.__SWAGGER_BRAND?.version || '1.0.0'}</div>
         </div>
       </div>
     `;
