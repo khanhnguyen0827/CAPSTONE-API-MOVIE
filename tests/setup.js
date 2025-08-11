@@ -14,6 +14,7 @@ process.env.NODE_ENV = 'test';
 process.env.PORT = '3001'; // Use different port for tests
 process.env.DATABASE_URL = process.env.TEST_DATABASE_URL || process.env.DATABASE_URL;
 process.env.JWT_SECRET = 'test-secret-key';
+process.env.ACCESS_TOKEN_SECRET = 'test-secret-key'; // Add this for auth service
 process.env.CYBERSOFT_TOKEN = 'test-cybersoft-token';
 
 console.log('🧪 Test environment configured');

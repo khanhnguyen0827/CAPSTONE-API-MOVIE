@@ -5,6 +5,7 @@ import {
   getCinemaSchedules,
   getMovieSchedules
 } from '../controllers/cinema.controller.js';
+import { protect } from '../common/middlewares/protect.middleware.js';
 
 const router = express.Router();
 
@@ -46,7 +47,7 @@ const router = express.Router();
  *       500:
  *         description: Lỗi server
  */
-router.get('/LayThongTinHeThongRap', getCinemaSystems);
+router.get('/LayThongTinHeThongRap', protect, getCinemaSystems);
 
 /**
  * @swagger
@@ -92,7 +93,7 @@ router.get('/LayThongTinHeThongRap', getCinemaSystems);
  *       500:
  *         description: Lỗi server
  */
-router.get('/LayThongTinCumRapTheoHeThong/:maHeThongRap', getCinemaClusters);
+router.get('/LayThongTinCumRapTheoHeThong/:maHeThongRap', protect, getCinemaClusters);
 
 /**
  * @swagger

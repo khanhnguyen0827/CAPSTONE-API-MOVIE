@@ -147,5 +147,6 @@ router.post('/thong-tin-tai-khoan', protect, getUserInfo);
 router.post('/login', validateLogin, login); // POST /api/v1/auth/login
 router.post('/register', validateRegister, register); // POST /api/v1/auth/register
 router.get('/me', protect, getUserInfo); // GET /api/v1/auth/me
+router.get('/thong-tin', protect, getUserInfo); // GET /api/v1/auth/thong-tin (legacy compatibility)
 
 export default router;

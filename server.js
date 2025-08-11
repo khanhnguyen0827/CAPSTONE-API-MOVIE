@@ -24,7 +24,7 @@ import rootRoutes from './src/routers/root.router.js';
 import { errorHandler } from './src/common/helpers/handle-err.helper.js';
 
 const app = express();
-const PORT = SERVER_CONFIG.PORT;
+const PORT = process.env.PORT || SERVER_CONFIG.PORT || 3000;
 
 // Security middleware
 app.use(helmet());
@@ -59,6 +59,12 @@ app.use('/uploads', express.static(UPLOAD_CONFIG.UPLOAD_PATH));
 // Swagger Documentation
 const API_PREFIX = SERVER_CONFIG.API_PREFIX;
 app.use(`${API_PREFIX}/docs`, swaggerUi.serve, swaggerUi.setup(swaggerSpecs, swaggerUIOptions));
+
+// Direct access to OpenAPI spec
+app.get(`${API_PREFIX}/docs/swagger.json`, (req, res) => {
+  res.setHeader('Content-Type', 'application/json');
+  res.json(swaggerSpecs);
+});
 
 // Parent Router (manages all child routers)
 app.use('/', rootRoutes);

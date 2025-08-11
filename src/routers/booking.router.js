@@ -70,7 +70,7 @@ const router = express.Router();
  *       500:
  *         description: Lỗi server
  */
-router.get('/LayDanhSachPhongVe', getSeatList);
+router.get('/LayDanhSachPhongVe', protect, getSeatList);
 
 /**
  * @swagger

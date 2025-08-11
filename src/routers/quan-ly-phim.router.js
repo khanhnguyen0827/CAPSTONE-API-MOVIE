@@ -85,7 +85,7 @@ router.get('/LayDanhSachBanner', getBanners);
  *       500:
  *         description: Lỗi server
  */
-router.get('/LayDanhSachPhim', getMovies);
+router.get('/LayDanhSachPhim', protect, getMovies);
 
 /**
  * @swagger
@@ -389,6 +389,13 @@ router.delete('/XoaPhim', protect, adminOnly, (req, res, next) => {
   if (req.query && req.query.maPhim) req.params.maPhim = req.query.maPhim;
   next();
 }, deleteMovie);
+
+// Route aliases for testing compatibility
+router.post('/ThemPhim', protect, adminOnly, upload.single('hinhAnh'), validateMovie, createMovie);
+router.put('/CapNhatPhim', protect, adminOnly, (req, res, next) => {
+  if (req.body && req.body.maPhim) req.params.maPhim = req.body.maPhim;
+  next();
+}, upload.single('hinhAnh'), validateMovieUpdate, updateMovie);
 
 export default router;
 
